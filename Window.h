@@ -53,6 +53,13 @@ template <class T> struct Window
             bool isBeingActivated = action != WA_INACTIVE;
             return 0;
         }
+
+        case WM_CHAR:
+            BOOL handled = pWindow->Callback()->HandleKey(hwnd, wParam);
+            if (handled)
+            {
+                return 0;
+            }
         }
 
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -126,6 +133,11 @@ template <class T> struct Window
         }
 
         return static_cast<int>(msg.wParam);
+    }
+
+    T *Callback()
+    {
+        return m_pCallBack.get();
     }
 
   private:

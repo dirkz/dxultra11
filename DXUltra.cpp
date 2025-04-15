@@ -60,4 +60,18 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
         m_device.GetAddressOf(), &chosenFeatureLevel, &m_context));
 }
 
+BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
+{
+    if (wParam == VK_ESCAPE)
+    {
+        BOOL b = PostMessage(hwnd, WM_CLOSE, 0, 0);
+        if (!b)
+        {
+            CheckLastError();
+        }
+    }
+
+    return TRUE;
+}
+
 } // namespace dxultra11

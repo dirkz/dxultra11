@@ -13,6 +13,8 @@ struct DXUltra
 
     DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight);
 
+    BOOL HandleKey(HWND hwnd, WPARAM wParam);
+
   private:
     ComPtr<IDXGIFactory> m_factory;
     ComPtr<IDXGIAdapter> m_adapter;
