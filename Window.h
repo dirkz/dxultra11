@@ -70,35 +70,38 @@ template <class T> struct Window
 
         RegisterClass(&wc);
 
-        RECT rect;
+        RECT rect{0, 0, 800, 600};
         LPRECT pRect = T::DesiredWindowRect(&rect);
+
+        DWORD windowStyle = WS_OVERLAPPEDWINDOW;
+
+        AdjustWindowRect(&rect, windowStyle, FALSE);
 
         int x = CW_USEDEFAULT;
         int y = CW_USEDEFAULT;
-        int width = CW_USEDEFAULT;
-        int height = CW_USEDEFAULT;
+        m_initialSupposedWindowWidth = rect.right - rect.left;
+        m_initialSupposedWindowHeight = rect.bottom - rect.top;
 
         if (pRect)
         {
             x = pRect->left;
             y = pRect->top;
-            width = pRect->right - pRect->left;
-            height = pRect->bottom - pRect->top;
         }
 
-        HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
-                                   classname.c_str(),   // Window class
-                                   title.c_str(),       // Window text
-                                   WS_OVERLAPPEDWINDOW, // Window style
+        HWND hwnd =
+            CreateWindowEx(0,                 // Optional window styles
+                           classname.c_str(), // Window class
+                           title.c_str(),     // Window text
+                           windowStyle,
 
-                                   // Size and position
-                                   x, y, width, height,
+                           // Size and position
+                           x, y, m_initialSupposedWindowWidth, m_initialSupposedWindowHeight,
 
-                                   NULL,      // Parent window
-                                   NULL,      // Menu
-                                   hInstance, // Instance handle
-                                   this       // Additional application data
-        );
+                           NULL,      // Parent window
+                           NULL,      // Menu
+                           hInstance, // Instance handle
+                           this       // Additional application data
+            );
 
         if (hwnd == NULL)
         {
@@ -110,7 +113,7 @@ template <class T> struct Window
 
     void WindowCreated(HWND hwnd)
     {
-        m_pCallBack.reset(new T(hwnd));
+        m_pCallBack.reset(new T(hwnd, m_initialSupposedWindowWidth, m_initialSupposedWindowHeight));
     }
 
     int RunMessageLoop()
@@ -126,6 +129,8 @@ template <class T> struct Window
     }
 
   private:
+    UINT m_initialSupposedWindowWidth;
+    UINT m_initialSupposedWindowHeight;
     std::unique_ptr<T> m_pCallBack;
 };
 
