@@ -35,7 +35,7 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
     DXGI_MODE_DESC swapchainMode{supposedWidth,
                                  supposedHeight,
                                  refreshRate,
-                                 DXGI_FORMAT_G8R8_G8B8_UNORM,
+                                 DXGI_FORMAT_R8G8B8A8_UNORM,
                                  DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
                                  DXGI_MODE_SCALING_UNSPECIFIED};
     DXGI_SAMPLE_DESC sampleDescription{1, 0};
