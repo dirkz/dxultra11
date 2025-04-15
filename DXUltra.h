@@ -10,6 +10,8 @@ struct DXUltra
     static LPRECT DesiredWindowRect(LPRECT r);
     static std::wstring WindowClass();
     static std::wstring WindowTitle();
+
+    DXUltra(HWND hwnd);
 };
 
 } // namespace dxultra11

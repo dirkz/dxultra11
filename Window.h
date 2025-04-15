@@ -10,16 +10,35 @@ namespace dxultra11
 
 template <class T> struct Window
 {
-    struct WindowState
+    struct State
     {
         T *pCallBack = nullptr;
     };
 
+    static State *GetAppState(HWND hwnd)
+    {
+        LONG_PTR ptr = GetWindowLongPtr(hwnd, GWLP_USERDATA);
+        State *pState = reinterpret_cast<State *>(ptr);
+        return pState;
+    }
+
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        WindowState *pState = nullptr;
+        State *pState = nullptr;
 
         if (uMsg == WM_CREATE)
+        {
+            CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT *>(lParam);
+            pState = reinterpret_cast<State *>(pCreate->lpCreateParams);
+            pState->pCallBack = new T(hwnd);
+            SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pState);
+        }
+        else
+        {
+            pState = GetAppState(hwnd);
+        }
+
+        switch (uMsg)
         {
         }
 
@@ -52,7 +71,7 @@ template <class T> struct Window
             height = pRect->bottom - pRect->top;
         }
 
-        WindowState *pWindowState = new WindowState();
+        State *pWindowState = new State();
 
         HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
                                    classname.c_str(),   // Window class

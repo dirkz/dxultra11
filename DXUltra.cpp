@@ -26,4 +26,8 @@ std::wstring DXUltra::WindowTitle()
     return L"DXUltra 11";
 }
 
+DXUltra::DXUltra(HWND hwnd)
+{
+}
+
 } // namespace dxultra11
