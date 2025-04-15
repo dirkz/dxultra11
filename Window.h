@@ -71,22 +71,16 @@ template <class T> struct Window
         RegisterClass(&wc);
 
         RECT rect{0, 0, 800, 600};
-        LPRECT pRect = T::DesiredWindowRect(&rect);
+        T::DesiredWindowRect(&rect);
 
         DWORD windowStyle = WS_OVERLAPPEDWINDOW;
 
         AdjustWindowRect(&rect, windowStyle, FALSE);
 
-        int x = CW_USEDEFAULT;
-        int y = CW_USEDEFAULT;
+        int x = rect.left;
+        int y = rect.top;
         m_initialSupposedWindowWidth = rect.right - rect.left;
         m_initialSupposedWindowHeight = rect.bottom - rect.top;
-
-        if (pRect)
-        {
-            x = pRect->left;
-            y = pRect->top;
-        }
 
         HWND hwnd =
             CreateWindowEx(0,                 // Optional window styles

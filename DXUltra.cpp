@@ -3,7 +3,7 @@
 namespace dxultra11
 {
 
-LPRECT DXUltra::DesiredWindowRect(LPRECT r)
+void DXUltra::DesiredWindowRect(LPRECT r)
 {
     int width = GetSystemMetrics(SM_CXFULLSCREEN);
     int height = GetSystemMetrics(SM_CYFULLSCREEN);
@@ -12,8 +12,6 @@ LPRECT DXUltra::DesiredWindowRect(LPRECT r)
     r->right = r->left + width / 2;
     r->top = 0;
     r->bottom = height / 2;
-
-    return r;
 }
 
 std::wstring DXUltra::WindowClass()
