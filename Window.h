@@ -44,6 +44,14 @@ template <class T> struct Window
             int height = HIWORD(lParam);
             return 0;
         }
+
+        case WM_ACTIVATE: {
+            WORD action = LOWORD(wParam);
+            std::wstring msg = L"*** WM_ACTIVATE with action " + std::to_wstring(action) + L"\n";
+            OutputDebugString(msg.c_str());
+            bool isBeingActivated = action != WA_INACTIVE;
+            return 0;
+        }
         }
 
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
