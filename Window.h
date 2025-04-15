@@ -91,6 +91,11 @@ template <class T> struct Window
                                    this       // Additional application data
         );
 
+        if (hwnd == NULL)
+        {
+            throw new std::runtime_error{"Could not create window"};
+        }
+
         ShowWindow(hwnd, nCmdShow);
     }
 
@@ -99,7 +104,7 @@ template <class T> struct Window
         m_pCallBack = new T(hwnd);
     }
 
-    WPARAM RunMessageLoop()
+    int RunMessageLoop()
     {
         MSG msg = {};
         while (GetMessage(&msg, NULL, 0, 0) > 0)
@@ -108,7 +113,7 @@ template <class T> struct Window
             DispatchMessage(&msg);
         }
 
-        return msg.wParam;
+        return static_cast<int>(msg.wParam);
     }
 
   private:
