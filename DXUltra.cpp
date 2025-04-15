@@ -68,7 +68,7 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
 
 void DXUltra::Resize(HWND hwnd, UINT width, UINT height)
 {
-    if (width != m_width || height != m_height)
+    if ((width != m_width || height != m_height) && (width > 0 && height > 0))
     {
         ResizeSwapchain(width, height);
         m_width = width;
