@@ -41,8 +41,9 @@ template <class T> struct Window
             return 0;
 
         case WM_SIZE: {
-            int width = LOWORD(lParam);
-            int height = HIWORD(lParam);
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            pWindow->Callback()->Resize(hwnd, width, height);
             return 0;
         }
 

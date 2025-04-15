@@ -24,7 +24,8 @@ std::wstring DXUltra::WindowTitle()
     return L"DXUltra 11";
 }
 
-DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight) : m_sampleDescription{1, 0}
+DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
+    : m_sampleDescription{1, 0}, m_width{supposedWidth}, m_height{supposedHeight}
 {
     HR(CreateDXGIFactory(IID_PPV_ARGS(m_factory.GetAddressOf())));
     HR(m_factory->EnumAdapters(0, m_adapter.GetAddressOf()));
@@ -59,7 +60,15 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight) : m_sampleD
                                      &chosenFeatureLevel, &m_context));
 
     CreateSwapchainBuffers();
-    CreateDepthStencilBufferView(supposedWidth, supposedHeight);
+    CreateDepthStencilBufferView();
+}
+
+void DXUltra::Resize(HWND hwnd, UINT width, UINT height)
+{
+    if (width != m_width || height != m_height)
+    {
+        OutputDebugString(L"*** should resize");
+    }
 }
 
 BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
@@ -83,12 +92,12 @@ void DXUltra::CreateSwapchainBuffers()
     m_device->CreateRenderTargetView(backbuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
 }
 
-void DXUltra::CreateDepthStencilBufferView(UINT width, UINT height)
+void DXUltra::CreateDepthStencilBufferView()
 {
     constexpr UINT mipLevels = 1;
     constexpr UINT arraySize = 1;
-    D3D11_TEXTURE2D_DESC desc{width,
-                              height,
+    D3D11_TEXTURE2D_DESC desc{m_width,
+                              m_height,
                               mipLevels,
                               arraySize,
                               DXGI_FORMAT_D24_UNORM_S8_UINT,

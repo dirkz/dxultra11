@@ -13,11 +13,12 @@ struct DXUltra
 
     DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight);
 
+    void Resize(HWND hwnd, UINT width, UINT height);
     BOOL HandleKey(HWND hwnd, WPARAM wParam);
 
   private:
     void CreateSwapchainBuffers();
-    void CreateDepthStencilBufferView(UINT width, UINT height);
+    void CreateDepthStencilBufferView();
 
     DXGI_SAMPLE_DESC m_sampleDescription;
     ComPtr<IDXGIFactory> m_factory;
@@ -28,6 +29,8 @@ struct DXUltra
     ComPtr<ID3D11RenderTargetView> m_renderTargetView;
     ComPtr<ID3D11Texture2D> m_depthStencilBuffer;
     ComPtr<ID3D11DepthStencilView> m_depthStencilView;
+    UINT m_width;
+    UINT m_height;
 };
 
 } // namespace dxultra11
