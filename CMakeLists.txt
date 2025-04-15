@@ -28,3 +28,5 @@ endif()
 add_subdirectory(common)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE common)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE d3d11.lib dxgi.lib dxguid.lib D3DCompiler.lib)
