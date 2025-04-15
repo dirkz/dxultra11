@@ -70,10 +70,9 @@ void DXUltra::Resize(HWND hwnd, UINT width, UINT height)
 {
     if (width != m_width || height != m_height)
     {
-        m_renderTargetView.Reset();
-        HR(m_swapchain->ResizeBuffers(SwapchainBufferCount, width, height, SwapchainFormat, 0));
-        CreateSwapchainBuffers();
-        CreateDepthStencilBufferView();
+        ResizeSwapchain(width, height);
+        m_width = width;
+        m_height = height;
     }
 }
 
@@ -117,6 +116,14 @@ void DXUltra::CreateDepthStencilBufferView()
     HR(m_device->CreateTexture2D(&desc, nullptr, m_depthStencilBuffer.ReleaseAndGetAddressOf()));
     HR(m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr,
                                         m_depthStencilView.ReleaseAndGetAddressOf()));
+}
+
+void DXUltra::ResizeSwapchain(UINT width, UINT height)
+{
+    m_renderTargetView.Reset();
+    HR(m_swapchain->ResizeBuffers(SwapchainBufferCount, width, height, SwapchainFormat, 0));
+    CreateSwapchainBuffers();
+    CreateDepthStencilBufferView();
 }
 
 } // namespace dxultra11
