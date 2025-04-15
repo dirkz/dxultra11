@@ -13,8 +13,27 @@ template <class T> struct WindowState
     T *pCallBack = nullptr;
 };
 
+template <class T> LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    WindowState<T> *pState = nullptr;
+
+    if (uMsg == WM_CREATE)
+    {
+    }
+
+    return TRUE;
+}
+
 template <class T> void OpenWindow(HINSTANCE hInstance)
 {
+    std::wstring classname = T::WindowClass();
+    std::wstring title = T::WindowTitle();
+
+    WNDCLASS wc{};
+    wc.hInstance = hInstance;
+    wc.lpszClassName = classname.c_str();
+    wc.lpfnWndProc = WindowProc<T>;
+
     RECT rect;
     LPRECT pRect = T::DesiredWindowRect(&rect);
 
@@ -32,9 +51,6 @@ template <class T> void OpenWindow(HINSTANCE hInstance)
     }
 
     WindowState<T> *pWindowState = new WindowState<T>();
-
-    std::wstring classname = T::WindowClass();
-    std::wstring title = T::WindowTitle();
 
     HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
                                classname.c_str(),   // Window class
