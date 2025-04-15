@@ -17,7 +17,7 @@ struct DXUltra
 
   private:
     void CreateSwapchainBuffers();
-    void CreateDepthStencilBufferView();
+    void CreateDepthStencilBufferView(UINT width, UINT height);
 
     DXGI_SAMPLE_DESC m_sampleDescription;
     ComPtr<IDXGIFactory> m_factory;
@@ -26,6 +26,8 @@ struct DXUltra
     ComPtr<IDXGISwapChain> m_swapchain;
     ComPtr<ID3D11DeviceContext> m_context;
     ComPtr<ID3D11RenderTargetView> m_renderTargetView;
+    ComPtr<ID3D11Texture2D> m_depthStencilBuffer;
+    ComPtr<ID3D11DepthStencilView> m_depthStencilView;
 };
 
 } // namespace dxultra11

@@ -59,7 +59,7 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight) : m_sampleD
         m_device.GetAddressOf(), &chosenFeatureLevel, &m_context));
 
     CreateSwapchainBuffers();
-    CreateDepthStencilBufferView();
+    CreateDepthStencilBufferView(supposedWidth, supposedHeight);
 }
 
 BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
@@ -83,8 +83,24 @@ void DXUltra::CreateSwapchainBuffers()
     m_device->CreateRenderTargetView(backbuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
 }
 
-void DXUltra::CreateDepthStencilBufferView()
+void DXUltra::CreateDepthStencilBufferView(UINT width, UINT height)
 {
+    constexpr UINT mipLevels = 1;
+    constexpr UINT arraySize = 1;
+    D3D11_TEXTURE2D_DESC desc{width,
+                              height,
+                              mipLevels,
+                              arraySize,
+                              DXGI_FORMAT_D24_UNORM_S8_UINT,
+                              m_sampleDescription,
+                              D3D11_USAGE_DEFAULT,
+                              D3D11_BIND_DEPTH_STENCIL,
+                              0,
+                              0};
+
+    ThrowIfFailed(m_device->CreateTexture2D(&desc, nullptr, m_depthStencilBuffer.GetAddressOf()));
+    ThrowIfFailed(m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr,
+                                                   m_depthStencilView.GetAddressOf()));
 }
 
 } // namespace dxultra11
