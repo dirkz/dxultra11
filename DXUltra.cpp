@@ -31,7 +31,22 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
     ThrowIfFailed(CreateDXGIFactory(IID_PPV_ARGS(m_factory.GetAddressOf())));
     ThrowIfFailed(m_factory->EnumAdapters(0, m_adapter.GetAddressOf()));
 
-    DXGI_MODE_DESC swapchainMode{};
+    DXGI_RATIONAL refreshRate{60, 1};
+    DXGI_MODE_DESC swapchainMode{supposedWidth,
+                                 supposedHeight,
+                                 refreshRate,
+                                 DXGI_FORMAT_G8R8_G8B8_UNORM,
+                                 DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
+                                 DXGI_MODE_SCALING_UNSPECIFIED};
+    DXGI_SAMPLE_DESC sampleDescription{1, 0};
+    DXGI_SWAP_CHAIN_DESC swapchainDescription{swapchainMode,
+                                              sampleDescription,
+                                              DXGI_USAGE_RENDER_TARGET_OUTPUT,
+                                              1,
+                                              hwnd,
+                                              TRUE,
+                                              DXGI_SWAP_EFFECT_DISCARD,
+                                              0};
 
     UINT flags = 0;
 
@@ -41,9 +56,10 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
 
     D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
     D3D_FEATURE_LEVEL chosenFeatureLevel = D3D_FEATURE_LEVEL_1_0_CORE;
-    ThrowIfFailed(D3D11CreateDevice(m_adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN, nullptr, flags,
-                                    &featureLevel, 1, D3D11_SDK_VERSION, m_device.GetAddressOf(),
-                                    &chosenFeatureLevel, &m_context));
+    ThrowIfFailed(D3D11CreateDeviceAndSwapChain(
+        m_adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN, nullptr, flags, &featureLevel, 1,
+        D3D11_SDK_VERSION, &swapchainDescription, m_swapchain.GetAddressOf(),
+        m_device.GetAddressOf(), &chosenFeatureLevel, &m_context));
 }
 
 } // namespace dxultra11
