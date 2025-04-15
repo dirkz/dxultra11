@@ -41,7 +41,7 @@ template <class T> struct Window
             return 0;
 
         case WM_SIZE: {
-            int width = LOWORD(lParam); // Macro to get the low-order word.
+            int width = LOWORD(lParam);
             int height = HIWORD(lParam);
             return 0;
         }
