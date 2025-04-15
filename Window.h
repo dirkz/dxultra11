@@ -1,5 +1,10 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+#include <string>
+
 namespace dxultra11
 {
 
@@ -28,7 +33,7 @@ template <class T> void OpenWindow(HINSTANCE hInstance)
 
     WindowState<T> *pWindowState = new WindowState<T>();
 
-    std::wstring classname = T::WindowCLass();
+    std::wstring classname = T::WindowClass();
     std::wstring title = T::WindowTitle();
 
     HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
