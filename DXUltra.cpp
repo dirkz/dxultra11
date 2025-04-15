@@ -1,5 +1,8 @@
 #include "DXUltra.h"
 
+constexpr DXGI_FORMAT SwapchainFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+constexpr UINT SwapchainBufferCount = 1;
+
 namespace dxultra11
 {
 
@@ -34,13 +37,13 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
     DXGI_MODE_DESC swapchainMode{supposedWidth,
                                  supposedHeight,
                                  refreshRate,
-                                 DXGI_FORMAT_R8G8B8A8_UNORM,
+                                 SwapchainFormat,
                                  DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
                                  DXGI_MODE_SCALING_UNSPECIFIED};
     DXGI_SWAP_CHAIN_DESC swapchainDescription{swapchainMode,
                                               m_sampleDescription,
                                               DXGI_USAGE_RENDER_TARGET_OUTPUT,
-                                              1,
+                                              SwapchainBufferCount,
                                               hwnd,
                                               TRUE,
                                               DXGI_SWAP_EFFECT_DISCARD,
