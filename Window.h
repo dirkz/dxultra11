@@ -40,12 +40,21 @@ template <class T> struct Window
 
         switch (uMsg)
         {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            return 0;
+
+        case WM_SIZE: {
+            int width = LOWORD(lParam); // Macro to get the low-order word.
+            int height = HIWORD(lParam);
+            return 0;
+        }
         }
 
-        return TRUE;
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
-    static void Create(HINSTANCE hInstance)
+    static void Create(HINSTANCE hInstance, int nCmdShow)
     {
         std::wstring classname = T::WindowClass();
         std::wstring title = T::WindowTitle();
@@ -86,6 +95,26 @@ template <class T> struct Window
                                    hInstance,   // Instance handle
                                    pWindowState // Additional application data
         );
+
+        ShowWindow(hwnd, nCmdShow);
+    }
+
+    static WPARAM RunMessageLoop()
+    {
+        MSG msg = {};
+        while (GetMessage(&msg, NULL, 0, 0) > 0)
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+
+        return msg.wParam;
+    }
+
+    static void CreateAndRunMessageLoop(HINSTANCE hInstance, int nCmdShow)
+    {
+        Create(hInstance, nCmdShow);
+        RunMessageLoop();
     }
 };
 
