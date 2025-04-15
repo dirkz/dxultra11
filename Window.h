@@ -47,6 +47,10 @@ template <class T> struct Window
             return 0;
         }
 
+        case WM_PAINT:
+            pWindow->Callback()->Draw();
+            return 0;
+
         case WM_ACTIVATE: {
             WORD action = LOWORD(wParam);
             std::wstring msg = L"*** WM_ACTIVATE with action " + std::to_wstring(action) + L"\n";

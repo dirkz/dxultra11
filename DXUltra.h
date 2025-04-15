@@ -14,6 +14,7 @@ struct DXUltra
     DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight);
 
     void Resize(HWND hwnd, UINT width, UINT height);
+    void Draw();
     BOOL HandleKey(HWND hwnd, WPARAM wParam);
 
   private:
