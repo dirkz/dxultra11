@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace dxultra
+namespace dxultra11
 {
 
 inline void ThrowIfFailed(HRESULT hr)
@@ -30,4 +30,4 @@ inline void CheckLastError()
     ThrowIfFailed(hr);
 }
 
-} // namespace dxultra
+} // namespace dxultra11
