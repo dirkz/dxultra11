@@ -77,6 +77,12 @@ template <class T> struct Window
 
         AdjustWindowRect(&rect, windowStyle, FALSE);
 
+        if (rect.top < 0)
+        {
+            rect.bottom += -rect.top;
+            rect.top = 0;
+        }
+
         int x = rect.left;
         int y = rect.top;
         m_initialSupposedWindowWidth = rect.right - rect.left;
