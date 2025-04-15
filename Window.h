@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <memory>
 #include <string>
 
 namespace dxultra11
@@ -109,7 +110,7 @@ template <class T> struct Window
 
     void WindowCreated(HWND hwnd)
     {
-        m_pCallBack = new T(hwnd);
+        m_pCallBack.reset(new T(hwnd));
     }
 
     int RunMessageLoop()
@@ -125,7 +126,7 @@ template <class T> struct Window
     }
 
   private:
-    T *m_pCallBack = nullptr;
+    std::unique_ptr<T> m_pCallBack;
 };
 
 } // namespace dxultra11
