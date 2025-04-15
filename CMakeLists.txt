@@ -19,7 +19,7 @@ add_compile_definitions(_UNICODE UNICODE)
 #cmake_path(SET DIRECTX_HEADER_PATH ${CMAKE_CURRENT_SOURCE_DIR}/DirectX-Headers/include/directx)
 
 # Add source to this project's executable.
-add_executable (${CMAKE_PROJECT_NAME} WIN32 "main.cpp")
+add_executable (${CMAKE_PROJECT_NAME} WIN32 "main.cpp" "Window.h" "DXUltra.h" "DXUltra.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET dxultra11 PROPERTY CXX_STANDARD 20)
