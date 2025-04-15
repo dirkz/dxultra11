@@ -10,32 +10,27 @@ namespace dxultra11
 
 template <class T> struct Window
 {
-    struct State
-    {
-        T *pCallBack = nullptr;
-    };
-
-    static State *GetAppState(HWND hwnd)
+    static Window<T> *GetAppState(HWND hwnd)
     {
         LONG_PTR ptr = GetWindowLongPtr(hwnd, GWLP_USERDATA);
-        State *pState = reinterpret_cast<State *>(ptr);
+        Window<T> *pState = reinterpret_cast<Window<T> *>(ptr);
         return pState;
     }
 
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        State *pState = nullptr;
+        Window<T> *pWindow = nullptr;
 
         if (uMsg == WM_CREATE)
         {
             CREATESTRUCT *pCreate = reinterpret_cast<CREATESTRUCT *>(lParam);
-            pState = reinterpret_cast<State *>(pCreate->lpCreateParams);
-            pState->pCallBack = new T(hwnd);
-            SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pState);
+            pWindow = reinterpret_cast<Window<T> *>(pCreate->lpCreateParams);
+            pWindow->WindowCreated(hwnd);
+            SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
         }
         else
         {
-            pState = GetAppState(hwnd);
+            pWindow = GetAppState(hwnd);
         }
 
         switch (uMsg)
@@ -54,7 +49,7 @@ template <class T> struct Window
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
-    static void Create(HINSTANCE hInstance, int nCmdShow)
+    Window(HINSTANCE hInstance, int nCmdShow)
     {
         std::wstring classname = T::WindowClass();
         std::wstring title = T::WindowTitle();
@@ -63,6 +58,8 @@ template <class T> struct Window
         wc.hInstance = hInstance;
         wc.lpszClassName = classname.c_str();
         wc.lpfnWndProc = WindowProc;
+
+        RegisterClass(&wc);
 
         RECT rect;
         LPRECT pRect = T::DesiredWindowRect(&rect);
@@ -80,8 +77,6 @@ template <class T> struct Window
             height = pRect->bottom - pRect->top;
         }
 
-        State *pWindowState = new State();
-
         HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
                                    classname.c_str(),   // Window class
                                    title.c_str(),       // Window text
@@ -90,16 +85,21 @@ template <class T> struct Window
                                    // Size and position
                                    x, y, width, height,
 
-                                   NULL,        // Parent window
-                                   NULL,        // Menu
-                                   hInstance,   // Instance handle
-                                   pWindowState // Additional application data
+                                   NULL,      // Parent window
+                                   NULL,      // Menu
+                                   hInstance, // Instance handle
+                                   this       // Additional application data
         );
 
         ShowWindow(hwnd, nCmdShow);
     }
 
-    static WPARAM RunMessageLoop()
+    void WindowCreated(HWND hwnd)
+    {
+        m_pCallBack = new T(hwnd);
+    }
+
+    WPARAM RunMessageLoop()
     {
         MSG msg = {};
         while (GetMessage(&msg, NULL, 0, 0) > 0)
@@ -111,11 +111,8 @@ template <class T> struct Window
         return msg.wParam;
     }
 
-    static void CreateAndRunMessageLoop(HINSTANCE hInstance, int nCmdShow)
-    {
-        Create(hInstance, nCmdShow);
-        RunMessageLoop();
-    }
+  private:
+    T *m_pCallBack = nullptr;
 };
 
 } // namespace dxultra11
