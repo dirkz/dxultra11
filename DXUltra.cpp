@@ -24,7 +24,7 @@ std::wstring DXUltra::WindowTitle()
     return L"DXUltra 11";
 }
 
-DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
+DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight) : m_sampleDescription{1, 0}
 {
     ThrowIfFailed(CreateDXGIFactory(IID_PPV_ARGS(m_factory.GetAddressOf())));
     ThrowIfFailed(m_factory->EnumAdapters(0, m_adapter.GetAddressOf()));
@@ -36,9 +36,8 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
                                  DXGI_FORMAT_R8G8B8A8_UNORM,
                                  DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
                                  DXGI_MODE_SCALING_UNSPECIFIED};
-    DXGI_SAMPLE_DESC sampleDescription{1, 0};
     DXGI_SWAP_CHAIN_DESC swapchainDescription{swapchainMode,
-                                              sampleDescription,
+                                              m_sampleDescription,
                                               DXGI_USAGE_RENDER_TARGET_OUTPUT,
                                               1,
                                               hwnd,
@@ -60,6 +59,7 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
         m_device.GetAddressOf(), &chosenFeatureLevel, &m_context));
 
     CreateSwapchainBuffers();
+    CreateDepthStencilBufferView();
 }
 
 BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
@@ -81,6 +81,10 @@ void DXUltra::CreateSwapchainBuffers()
     ComPtr<ID3D11Texture2D> backbuffer;
     ThrowIfFailed(m_swapchain->GetBuffer(0, IID_PPV_ARGS(backbuffer.GetAddressOf())));
     m_device->CreateRenderTargetView(backbuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
+}
+
+void DXUltra::CreateDepthStencilBufferView()
+{
 }
 
 } // namespace dxultra11

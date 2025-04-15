@@ -17,7 +17,9 @@ struct DXUltra
 
   private:
     void CreateSwapchainBuffers();
+    void CreateDepthStencilBufferView();
 
+    DXGI_SAMPLE_DESC m_sampleDescription;
     ComPtr<IDXGIFactory> m_factory;
     ComPtr<IDXGIAdapter> m_adapter;
     ComPtr<ID3D11Device> m_device;
