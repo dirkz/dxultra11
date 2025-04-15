@@ -87,6 +87,8 @@ void DXUltra::Draw()
 
     std::array<FLOAT, 4> color{0.2f, 0.8f, 0.8f, 1.f};
     m_context->ClearRenderTargetView(m_renderTargetView.Get(), color.data());
+
+    HR(m_swapchain->Present(1, 0));
 }
 
 BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
