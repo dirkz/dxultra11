@@ -9,13 +9,22 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("dxultra11")
+project ("dxultra11" CXX)
+
+set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD_REQUIRED True)
+
+add_compile_definitions(_UNICODE UNICODE)
+
+#cmake_path(SET DIRECTX_HEADER_PATH ${CMAKE_CURRENT_SOURCE_DIR}/DirectX-Headers/include/directx)
 
 # Add source to this project's executable.
-add_executable (dxultra11 "dxultra11.cpp" "dxultra11.h")
+add_executable (${CMAKE_PROJECT_NAME} WIN32 "main.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET dxultra11 PROPERTY CXX_STANDARD 20)
 endif()
 
-# TODO: Add tests and install targets if needed.
+add_subdirectory(common)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE common)
