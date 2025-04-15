@@ -85,6 +85,9 @@ void DXUltra::Draw()
                             0.f, 1.f};
     m_context->RSSetViewports(1, &viewport);
 
+    m_context->ClearDepthStencilView(m_depthStencilView.Get(),
+                                     D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+
     std::array<FLOAT, 4> color{0.2f, 0.8f, 0.8f, 1.f};
     m_context->ClearRenderTargetView(m_renderTargetView.Get(), color.data());
 
