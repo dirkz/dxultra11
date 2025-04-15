@@ -16,11 +16,14 @@ struct DXUltra
     BOOL HandleKey(HWND hwnd, WPARAM wParam);
 
   private:
+    void CreateSwapchainBuffers();
+
     ComPtr<IDXGIFactory> m_factory;
     ComPtr<IDXGIAdapter> m_adapter;
     ComPtr<ID3D11Device> m_device;
     ComPtr<IDXGISwapChain> m_swapchain;
     ComPtr<ID3D11DeviceContext> m_context;
+    ComPtr<ID3D11RenderTargetView> m_renderTargetView;
 };
 
 } // namespace dxultra11

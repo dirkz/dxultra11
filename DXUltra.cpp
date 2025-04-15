@@ -58,6 +58,8 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight)
         m_adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN, nullptr, flags, &featureLevel, 1,
         D3D11_SDK_VERSION, &swapchainDescription, m_swapchain.GetAddressOf(),
         m_device.GetAddressOf(), &chosenFeatureLevel, &m_context));
+
+    CreateSwapchainBuffers();
 }
 
 BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
@@ -72,6 +74,13 @@ BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
     }
 
     return TRUE;
+}
+
+void DXUltra::CreateSwapchainBuffers()
+{
+    ComPtr<ID3D11Texture2D> backbuffer;
+    ThrowIfFailed(m_swapchain->GetBuffer(0, IID_PPV_ARGS(backbuffer.GetAddressOf())));
+    m_device->CreateRenderTargetView(backbuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
 }
 
 } // namespace dxultra11
