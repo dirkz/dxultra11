@@ -103,6 +103,11 @@ BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
     return TRUE;
 }
 
+float DXUltra::AspectRatio() const
+{
+    return static_cast<float>(m_width) / m_height;
+}
+
 void DXUltra::CreateSwapchainBuffers()
 {
     ComPtr<ID3D11Texture2D> backbuffer;

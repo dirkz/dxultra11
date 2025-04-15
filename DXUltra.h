@@ -17,6 +17,8 @@ struct DXUltra
     void Draw();
     BOOL HandleKey(HWND hwnd, WPARAM wParam);
 
+    float AspectRatio() const;
+
   private:
     void CreateSwapchainBuffers();
     void CreateDepthStencilBufferView();
