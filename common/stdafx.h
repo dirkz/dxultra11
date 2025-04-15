@@ -6,6 +6,7 @@
 #include <comdef.h>
 #include <wrl.h>
 
+#include <d3d11.h>
 #include <DirectXColors.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
