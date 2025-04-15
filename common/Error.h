@@ -5,7 +5,7 @@
 namespace dxultra11
 {
 
-inline void ThrowIfFailed(HRESULT hr)
+inline void HR(HRESULT hr)
 {
     if (FAILED(hr))
     {
@@ -27,7 +27,7 @@ inline void CheckLastError()
 {
     DWORD error = GetLastError();
     HRESULT hr = HRESULT_FROM_WIN32(error);
-    ThrowIfFailed(hr);
+    HR(hr);
 }
 
 } // namespace dxultra11

@@ -26,8 +26,8 @@ std::wstring DXUltra::WindowTitle()
 
 DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight) : m_sampleDescription{1, 0}
 {
-    ThrowIfFailed(CreateDXGIFactory(IID_PPV_ARGS(m_factory.GetAddressOf())));
-    ThrowIfFailed(m_factory->EnumAdapters(0, m_adapter.GetAddressOf()));
+    HR(CreateDXGIFactory(IID_PPV_ARGS(m_factory.GetAddressOf())));
+    HR(m_factory->EnumAdapters(0, m_adapter.GetAddressOf()));
 
     DXGI_RATIONAL refreshRate{60, 1};
     DXGI_MODE_DESC swapchainMode{supposedWidth,
@@ -53,10 +53,10 @@ DXUltra::DXUltra(HWND hwnd, UINT supposedWidth, UINT supposedHeight) : m_sampleD
 
     D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
     D3D_FEATURE_LEVEL chosenFeatureLevel = D3D_FEATURE_LEVEL_1_0_CORE;
-    ThrowIfFailed(D3D11CreateDeviceAndSwapChain(
-        m_adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN, nullptr, flags, &featureLevel, 1,
-        D3D11_SDK_VERSION, &swapchainDescription, m_swapchain.GetAddressOf(),
-        m_device.GetAddressOf(), &chosenFeatureLevel, &m_context));
+    HR(D3D11CreateDeviceAndSwapChain(m_adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN, nullptr, flags,
+                                     &featureLevel, 1, D3D11_SDK_VERSION, &swapchainDescription,
+                                     m_swapchain.GetAddressOf(), m_device.GetAddressOf(),
+                                     &chosenFeatureLevel, &m_context));
 
     CreateSwapchainBuffers();
     CreateDepthStencilBufferView(supposedWidth, supposedHeight);
@@ -79,7 +79,7 @@ BOOL DXUltra::HandleKey(HWND hwnd, WPARAM wParam)
 void DXUltra::CreateSwapchainBuffers()
 {
     ComPtr<ID3D11Texture2D> backbuffer;
-    ThrowIfFailed(m_swapchain->GetBuffer(0, IID_PPV_ARGS(backbuffer.GetAddressOf())));
+    HR(m_swapchain->GetBuffer(0, IID_PPV_ARGS(backbuffer.GetAddressOf())));
     m_device->CreateRenderTargetView(backbuffer.Get(), nullptr, m_renderTargetView.GetAddressOf());
 }
 
@@ -98,9 +98,9 @@ void DXUltra::CreateDepthStencilBufferView(UINT width, UINT height)
                               0,
                               0};
 
-    ThrowIfFailed(m_device->CreateTexture2D(&desc, nullptr, m_depthStencilBuffer.GetAddressOf()));
-    ThrowIfFailed(m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr,
-                                                   m_depthStencilView.GetAddressOf()));
+    HR(m_device->CreateTexture2D(&desc, nullptr, m_depthStencilBuffer.GetAddressOf()));
+    HR(m_device->CreateDepthStencilView(m_depthStencilBuffer.Get(), nullptr,
+                                        m_depthStencilView.GetAddressOf()));
 }
 
 } // namespace dxultra11
