@@ -81,7 +81,8 @@ void DXUltra::Draw()
     std::array<ID3D11RenderTargetView *, 1> renderTargetViews{m_renderTargetView.Get()};
     m_context->OMSetRenderTargets(0, renderTargetViews.data(), m_depthStencilView.Get());
 
-    D3D11_VIEWPORT viewport{0, 0, m_width, m_height, 0.f, 1.f};
+    D3D11_VIEWPORT viewport{0,   0,  static_cast<FLOAT>(m_width), static_cast<FLOAT>(m_height),
+                            0.f, 1.f};
     m_context->RSSetViewports(1, &viewport);
 
     std::array<FLOAT, 4> color{0.2f, 0.8f, 0.8f, 1.f};
