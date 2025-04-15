@@ -8,7 +8,7 @@ template <class T> struct WindowState
     T *pCallBack = nullptr;
 };
 
-template <class T> void OpenWindow()
+template <class T> void OpenWindow(HINSTANCE hInstance)
 {
     RECT rect;
     LPRECT pRect = T::DesiredWindowRect(&rect);
@@ -27,6 +27,23 @@ template <class T> void OpenWindow()
     }
 
     WindowState<T> *pWindowState = new WindowState<T>();
+
+    std::wstring classname = T::WindowCLass();
+    std::wstring title = T::WindowTitle();
+
+    HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
+                               classname.c_str(),   // Window class
+                               title.c_str(),       // Window text
+                               WS_OVERLAPPEDWINDOW, // Window style
+
+                               // Size and position
+                               x, y, width, height,
+
+                               NULL,        // Parent window
+                               NULL,        // Menu
+                               hInstance,   // Instance handle
+                               pWindowState // Additional application data
+    );
 };
 
 } // namespace dxultra11
